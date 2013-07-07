@@ -192,8 +192,6 @@ int register_tests(void)
 
 void print_header(void)
 {
-  log_text(LOG_NOTICE, VERSION_STRING
-         ":  multi-threaded system evaluation benchmark\n");
 }
 
 
@@ -330,8 +328,7 @@ int parse_arguments(int argc, char *argv[])
 
 void print_run_mode(sb_test_t *test)
 {
-  log_text(LOG_NOTICE, "Running the test with following options:");
-  log_text(LOG_NOTICE, "Number of threads: %d", sb_globals.num_threads);
+  printf("%d,", sb_globals.num_threads);
 
   if (sb_globals.debug)
     log_text(LOG_NOTICE, "Debug mode enabled.\n");
@@ -349,8 +346,6 @@ void print_run_mode(sb_test_t *test)
     log_text(LOG_NOTICE, "Forcing shutdown in %u seconds",
              sb_globals.max_time + sb_globals.timeout);
   
-  log_text(LOG_NOTICE, "");
-
   if (test->ops.print_mode != NULL)
     test->ops.print_mode();
 }
@@ -478,8 +473,6 @@ int run_test(sb_test_t *test)
   
   pthread_mutex_unlock(&thread_start_mutex);
   
-  log_text(LOG_NOTICE, "Threads started!");  
-
   for(i = 0; i < sb_globals.num_threads; i++)
   {
     if((err = pthread_join(threads[i].thread, NULL)) != 0)
@@ -492,7 +485,6 @@ int run_test(sb_test_t *test)
 #ifdef HAVE_ALARM
   alarm(0);
 #endif
-  log_text(LOG_INFO, "Done.\n");
 
   /* cleanup test */
   if (test->ops.cleanup != NULL && test->ops.cleanup() != 0)

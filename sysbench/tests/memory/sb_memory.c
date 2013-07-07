@@ -322,11 +322,9 @@ void memory_print_mode(void)
 {
   char *str;
   
-  log_text(LOG_INFO, "Doing memory operations speed test");
-  log_text(LOG_INFO, "Memory block size: %ldK\n",
-           (long)(memory_block_size / 1024));
-  log_text(LOG_INFO, "Memory transfer size: %ldM\n",
-           (long)(memory_total_size / 1024 / 1024));
+  printf("%ld,", memory_block_size);
+  printf("%ld,",
+           memory_total_size);
 
   switch (memory_oper) {
     case SB_MEM_OP_READ:
@@ -342,7 +340,7 @@ void memory_print_mode(void)
       str = "(unknown)";
       break;
   }
-  log_text(LOG_INFO, "Memory operations type: %s", str);
+  printf("%s,", str);
 
   switch (memory_scope) {
     case SB_MEM_SCOPE_GLOBAL:
@@ -355,7 +353,7 @@ void memory_print_mode(void)
       str = "(unknown)";
       break;
   }
-  log_text(LOG_INFO, "Memory scope type: %s", str);
+  printf("%s,", str);
 }
 
 
@@ -363,14 +361,11 @@ void memory_print_stats(void)
 {
   double total_time;
 
-  total_time = NS2SEC(sb_timer_value(&sb_globals.exec_timer));
+  total_time = sb_timer_value(&sb_globals.exec_timer);
   
-  log_text(LOG_NOTICE, "Operations performed: %d (%8.2f ops/sec)\n", total_ops,
-           total_ops / total_time);
+  printf("%d,%f,", total_ops, total_ops / total_time);
   if (memory_oper != SB_MEM_OP_NONE)
-    log_text(LOG_NOTICE, "%4.2f MB transferred (%4.2f MB/sec)\n",
-             (double)total_bytes / (1024 * 1024),
-             (double)total_bytes / (1024 * 1024) / total_time);
+    printf("%d,%f,", total_bytes, total_bytes / total_time);
 }
 
 #ifdef HAVE_LARGE_PAGES

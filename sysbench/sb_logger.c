@@ -591,22 +591,13 @@ int oper_handler_done(void)
     t = merge_timers(&t,&(sb_globals.op_timers[i]));
 
   /* Print total statistics */
-  log_text(LOG_NOTICE, "");
-  log_text(LOG_NOTICE, "Test execution summary:");
-  log_text(LOG_NOTICE, "    total time:                          %.4fs",
-           NS2SEC(sb_timer_value(&sb_globals.exec_timer)));
-  log_text(LOG_NOTICE, "    total number of events:              %lld",
-           t.events);
-  log_text(LOG_NOTICE, "    total time taken by event execution: %.4f",
-           NS2SEC(get_sum_time(&t)));
+  printf("%lld,", sb_timer_value(&sb_globals.exec_timer));
+  printf("%lld,", t.events);
+  printf("%lld,", get_sum_time(&t));
 
-  log_text(LOG_NOTICE, "    per-request statistics:");
-  log_text(LOG_NOTICE, "         min:                            %10.2fms",
-           NS2MS(get_min_time(&t)));
-  log_text(LOG_NOTICE, "         avg:                            %10.2fms",
-           NS2MS(get_avg_time(&t)));
-  log_text(LOG_NOTICE, "         max:                            %10.2fms",
-           NS2MS(get_max_time(&t)));
+  printf("%lld,", get_min_time(&t));
+  printf("%lld,", get_avg_time(&t));
+  printf("%lld,", get_max_time(&t));
 
   /* Print approx. percentile value for event execution times */
   if (t.events > 0)
@@ -627,10 +618,8 @@ int oper_handler_done(void)
   
     /* Calculate response time corresponding to this element */
     optime = exp((double)i / oper_log_mult + oper_log_deduct);
-    log_text(LOG_NOTICE, "         approx. %3d percentile:         %10.2fms",
-             oper_percentile, NS2MS(optime));
+    printf("%f,", optime);
   }
-  log_text(LOG_NOTICE, "");
 
   /*
     Check how fair thread distribution over task is.
@@ -653,12 +642,10 @@ int oper_handler_done(void)
   events_stddev = sqrt(events_stddev / nthreads);
   time_stddev = sqrt(time_stddev / nthreads);
   
-  log_text(LOG_NOTICE, "Threads fairness:");
-  log_text(LOG_NOTICE, "    events (avg/stddev):           %.4f/%3.2f",
+  printf("%.4f,%3.2f,",
            events_avg, events_stddev);
-  log_text(LOG_NOTICE, "    execution time (avg/stddev):   %.4f/%3.2f",
+  printf("%.4f,%3.2f\n",
            time_avg, time_stddev);
-  log_text(LOG_NOTICE, "");
 
   if (sb_globals.debug)
   {
@@ -676,7 +663,6 @@ int oper_handler_done(void)
                NS2SEC(get_sum_time(&sb_globals.op_timers[i]))
                );
     }
-    log_text(LOG_NOTICE, "");
   }
 
   pthread_mutex_destroy(&oper_mutex);
