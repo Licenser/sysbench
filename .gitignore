@@ -1,0 +1,12 @@
+autom4te.cache/
+config.log
+config.status
+config/config.h
+config/stamp-h1
+doc/xsl/catalog.xml
+libtool
+sysbench/sysbench
+Makefile
+.deps
+*.o
+*.a
